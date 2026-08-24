@@ -1,0 +1,55 @@
+<div class="login-page d-flex align-items-center justify-content-center">
+  <div class="card shadow-sm login-card">
+    <div class="card-body p-4">
+
+      <div class="text-center mb-4">
+        <i class="bi bi-check2-square fs-1 text-accent"></i>
+        <h1 class="h4 mt-2 mb-1">Task Manager</h1>
+        <p class="text-secondary small mb-0">Sign in to continue</p>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger py-2 small" role="alert">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <div class="mb-3">
+          <label for="username" class="form-label small">Username</label>
+          <input
+            id="username"
+            type="text"
+            class="form-control"
+            formControlName="username"
+            [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
+            autocomplete="username">
+          <div class="invalid-feedback">Username is required</div>
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label small">Password</label>
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            formControlName="password"
+            [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid"
+            autocomplete="current-password">
+          <div class="invalid-feedback">Password is required</div>
+        </div>
+
+        <button type="submit" class="btn btn-accent w-100" [disabled]="loading()">
+          @if (loading()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Signing in
+          } @else {
+            Sign in
+          }
+        </button>
+
+      </form>
+    </div>
+  </div>
+</div>

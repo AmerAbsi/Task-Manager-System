@@ -1,0 +1,30 @@
+.log-container {
+  max-width: 100%;
+}
+
+.log-entry {
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e5e8;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: #eeedfe;
+  color: var(--tm-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+.log-icon.destructive {
+  background-color: #fbe9e7;
+  color: #b3261e;
+}

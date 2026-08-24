@@ -1,0 +1,79 @@
+<div class="modal-backdrop-custom" (click)="close()"></div>
+
+<div class="modal-custom">
+  <div class="card border-0 shadow">
+
+    <div class="card-header bg-white d-flex align-items-center">
+      <h2 class="h6 mb-0">{{ isEditMode ? 'Edit task' : 'New task' }}</h2>
+      <button class="btn btn-sm ms-auto" (click)="close()" aria-label="Close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="card-body">
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger py-2 small">{{ errorMessage() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <div class="mb-3">
+          <label class="form-label small">Title</label>
+          <input type="text" class="form-control form-control-sm"
+                 formControlName="title"
+                 [class.is-invalid]="form.controls.title.touched && form.controls.title.invalid">
+          <div class="invalid-feedback">Title is required</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small">Description</label>
+          <textarea class="form-control form-control-sm" rows="3"
+                    formControlName="description"
+                    [class.is-invalid]="form.controls.description.invalid"></textarea>
+          <div class="invalid-feedback">Description is too long</div>
+        </div>
+
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <label class="form-label small">Status</label>
+            <select class="form-select form-select-sm" formControlName="status">
+              @for (status of statuses; track status) {
+                <option [value]="status">{{ statusLabels[status] }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label small">Due date</label>
+            <input type="date" class="form-control form-control-sm"
+                   formControlName="dueDate">
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label small">Assign to</label>
+          <select class="form-select form-select-sm" formControlName="assignedUserId">
+            <option value="">Unassigned</option>
+            @for (user of users(); track user.id) {
+              <option [value]="user.id">{{ user.fullName }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="d-flex gap-2 justify-content-end">
+          <button type="button" class="btn btn-sm btn-outline-secondary"
+                  (click)="close()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-sm btn-accent" [disabled]="saving()">
+            @if (saving()) {
+              <span class="spinner-border spinner-border-sm me-1"></span>
+            }
+            {{ isEditMode ? 'Save changes' : 'Create task' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

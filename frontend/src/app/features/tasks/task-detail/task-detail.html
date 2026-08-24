@@ -1,0 +1,98 @@
+@if (loading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-secondary"></div>
+  </div>
+} @else if (!task()) {
+  <div class="alert alert-warning">{{ errorMessage() }}</div>
+} @else {
+
+  @if (authService.isAdmin()) {
+  <a routerLink="/admin/tasks" class="btn btn-sm btn-link text-secondary ps-0 mb-2">
+    <i class="bi bi-arrow-left"></i> Back to tasks
+  </a>
+}
+
+  <div class="row g-3">
+
+    <div class="col-12 col-lg-7">
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+
+          <div class="d-flex align-items-start gap-2 mb-3">
+            <h1 class="h5 mb-0 flex-grow-1">{{ task()!.title }}</h1>
+            <app-status-badge [status]="task()!.status" />
+          </div>
+
+          <p class="text-secondary small">
+            {{ task()!.description || 'No description provided.' }}
+          </p>
+
+          <dl class="row small mb-0">
+            <dt class="col-4 text-secondary fw-normal">Assigned to</dt>
+            <dd class="col-8">{{ task()!.assignedUserName || 'Unassigned' }}</dd>
+
+            <dt class="col-4 text-secondary fw-normal">Due date</dt>
+            <dd class="col-8">
+              {{ task()!.dueDate ? (task()!.dueDate | date: 'dd MMM yyyy') : '—' }}
+            </dd>
+
+            <dt class="col-4 text-secondary fw-normal">Created</dt>
+            <dd class="col-8 mb-0">
+              {{ task()!.createdAt | date: 'dd MMM yyyy, HH:mm' }}
+            </dd>
+          </dl>
+
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <label class="form-label small fw-medium">Update status</label>
+          <div class="d-flex gap-2">
+            <select class="form-select form-select-sm" [(ngModel)]="selectedStatus">
+              @for (status of statuses; track status) {
+                <option [value]="status">{{ statusLabels[status] }}</option>
+              }
+            </select>
+            <button class="btn btn-accent btn-sm" (click)="changeStatus()"
+                    [disabled]="savingStatus()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+          <h2 class="h6 mb-3">Comments</h2>
+
+          <div class="mb-4">
+            <textarea class="form-control form-control-sm" rows="2"
+                      placeholder="Write a comment"
+                      [(ngModel)]="newComment"></textarea>
+            <button class="btn btn-accent btn-sm mt-2" (click)="postComment()">
+              Post
+            </button>
+          </div>
+
+          @if (comments().length === 0) {
+            <p class="text-secondary small text-center py-3 mb-0">
+              No comments yet
+            </p>
+          } @else {
+            @for (comment of comments(); track comment.id) {
+              <app-comment-thread
+                [comment]="comment"
+                (replyRequested)="postReply($event)" />
+            }
+          }
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+}

@@ -1,0 +1,157 @@
+<div class="d-flex align-items-center mb-3">
+  <div>
+    <h1 class="h4 mb-1">Users</h1>
+    <p class="text-secondary small mb-0">{{ totalElements() }} total</p>
+  </div>
+  <button class="btn btn-accent btn-sm ms-auto" (click)="openCreate()">
+    <i class="bi bi-plus-lg me-1"></i> New user
+  </button>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-5">
+        <input type="text" class="form-control form-control-sm"
+               placeholder="Search by name or username"
+               [(ngModel)]="searchTerm"
+               (keyup.enter)="applyFilters()">
+      </div>
+      <div class="col-6 col-md-3">
+        <select class="form-select form-select-sm" [(ngModel)]="roleFilter">
+          <option value="">All roles</option>
+          @for (role of roles; track role) {
+            <option [value]="role">{{ role }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-6 col-md-2">
+        <select class="form-select form-select-sm" [(ngModel)]="activeFilter">
+          <option value="">All statuses</option>
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2 d-flex gap-2">
+        <button class="btn btn-accent btn-sm flex-fill" (click)="applyFilters()">
+          Filter
+        </button>
+        <button class="btn btn-outline-secondary btn-sm" (click)="resetFilters()"
+                aria-label="Reset filters">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger py-2 small">{{ errorMessage() }}</div>
+    }
+
+    @if (loading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-secondary"></div>
+      </div>
+    } @else if (users().length === 0) {
+      <div class="text-center text-secondary py-5">
+        <i class="bi bi-people fs-1"></i>
+        <p class="mt-2 mb-0">No users found</p>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr class="small">
+              <th>Name</th>
+              <th>Username</th>
+              <th class="d-none d-md-table-cell">Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th class="d-none d-lg-table-cell">Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users(); track user.id) {
+              <tr>
+                <td>{{ user.fullName }}</td>
+                <td class="text-secondary small">{{ user.username }}</td>
+                <td class="d-none d-md-table-cell text-secondary small">
+                  {{ user.email }}
+                </td>
+                <td>
+                  <span class="badge"
+                        [class.bg-dark]="user.role === 'ADMIN'"
+                        [class.bg-secondary]="user.role === 'USER'">
+                    {{ user.role }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge"
+                        [class.bg-success]="user.active"
+                        [class.bg-secondary]="!user.active">
+                    {{ user.active ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td class="d-none d-lg-table-cell text-secondary small">
+                  {{ user.createdAt | date: 'dd MMM yyyy' }}
+                </td>
+                  <td class="text-end">
+                  <button class="btn btn-sm btn-link text-secondary p-1"
+                          (click)="openEdit(user)" aria-label="Edit user">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-link text-danger p-1"
+                          (click)="confirmDelete(user)" aria-label="Delete user">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (totalPages() > 1) {
+        <nav class="mt-3">
+          <ul class="pagination pagination-sm justify-content-center mb-0">
+            <li class="page-item" [class.disabled]="currentPage() === 0">
+              <button class="page-link" (click)="goToPage(currentPage() - 1)">
+                Previous
+              </button>
+            </li>
+            @for (page of pageNumbers(); track page) {
+              <li class="page-item" [class.active]="page === currentPage()">
+                <button class="page-link" (click)="goToPage(page)">
+                  {{ page + 1 }}
+                </button>
+              </li>
+            }
+            <li class="page-item"
+                [class.disabled]="currentPage() === totalPages() - 1">
+              <button class="page-link" (click)="goToPage(currentPage() + 1)">
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      }
+    }
+
+  </div>
+</div>
+
+@if (showForm()) {
+  <app-user-form
+    [editingUser]="editingUser()"
+    (closed)="closeForm()"
+    (saved)="onSaved()" />
+}
+
+@if (deletingUser(); as user) {
+  <app-confirm-dialog
+    title="Delete user?"
+    [message]="'This will remove ' + user.fullName + ' from the system.'"
+    (confirmed)="performDelete()"
+    (cancelled)="cancelDelete()" />
+}

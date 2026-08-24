@@ -1,0 +1,117 @@
+<div class="mb-3">
+  <h1 class="h4 mb-1">Profile</h1>
+  <p class="text-secondary small mb-0">Manage your personal information</p>
+</div>
+
+@if (loading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-secondary"></div>
+  </div>
+} @else {
+
+  <div class="row g-3">
+
+    <div class="col-12 col-lg-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center py-4">
+          <div class="profile-avatar mx-auto mb-3">
+            {{ profile()?.fullName?.charAt(0) }}
+          </div>
+          <h2 class="h6 mb-1">{{ profile()?.fullName }}</h2>
+          <p class="text-secondary small mb-3">{{ profile()?.username }}</p>
+
+          <span class="badge"
+                [class.bg-dark]="profile()?.role === 'ADMIN'"
+                [class.bg-secondary]="profile()?.role === 'USER'">
+            {{ profile()?.role }}
+          </span>
+
+          <hr class="my-3">
+
+          <div class="text-secondary" style="font-size: 0.75rem;">
+            Member since {{ profile()?.createdAt | date: 'MMMM yyyy' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+          @if (successMessage()) {
+            <div class="alert alert-success py-2 small">{{ successMessage() }}</div>
+          }
+          @if (errorMessage()) {
+            <div class="alert alert-danger py-2 small">{{ errorMessage() }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="submit()">
+
+            <div class="mb-3">
+              <label class="form-label small">Full name</label>
+              <input type="text" class="form-control form-control-sm"
+                     formControlName="fullName"
+                     [class.is-invalid]="form.controls.fullName.touched && form.controls.fullName.invalid">
+              <div class="invalid-feedback">Full name is required</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label small">Email</label>
+              <input type="email" class="form-control form-control-sm"
+                     formControlName="email"
+                     [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid">
+              <div class="invalid-feedback">Enter a valid email address</div>
+            </div>
+
+            <hr>
+
+            <p class="small fw-medium mb-1">Change password</p>
+            <p class="text-secondary mb-3" style="font-size: 0.75rem;">
+              Leave blank to keep your current password
+            </p>
+
+            <div class="mb-3">
+              <label class="form-label small">Current password</label>
+              <input type="password" class="form-control form-control-sm"
+                     formControlName="currentPassword"
+                     autocomplete="current-password">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small">New password</label>
+              <input type="password" class="form-control form-control-sm"
+                     formControlName="password"
+                     autocomplete="new-password"
+                     [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid">
+              <div class="invalid-feedback">
+                At least 8 characters, with an uppercase letter, a lowercase letter,
+                a number and a special character
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label small">Confirm new password</label>
+              <input type="password" class="form-control form-control-sm"
+                     formControlName="confirmPassword"
+                     autocomplete="new-password"
+                     [class.is-invalid]="form.controls.confirmPassword.touched && form.hasError('passwordMismatch')">
+              <div class="invalid-feedback">Passwords do not match</div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-sm btn-accent" [disabled]="saving()">
+                @if (saving()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span>
+                }
+                Save changes
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+}

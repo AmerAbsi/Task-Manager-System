@@ -1,0 +1,69 @@
+<div class="notification-wrapper">
+
+  <button class="btn btn-sm position-relative" (click)="togglePanel()"
+          aria-label="Notifications">
+    <i class="bi bi-bell fs-5"></i>
+    @if (unreadCount() > 0) {
+      <span class="notification-badge">
+        {{ unreadCount() > 9 ? '9+' : unreadCount() }}
+      </span>
+    }
+  </button>
+
+  @if (panelOpen()) {
+    <div class="notification-overlay" (click)="closePanel()"></div>
+
+    <div class="notification-panel shadow">
+
+      <div class="d-flex align-items-center px-3 py-2 border-bottom">
+        <span class="fw-medium small">Notifications</span>
+        @if (unreadCount() > 0) {
+          <button class="btn btn-link btn-sm ms-auto p-0"
+                  style="font-size: 0.75rem;"
+                  (click)="markAllRead()">
+            Mark all read
+          </button>
+        }
+      </div>
+
+      @if (loading()) {
+        <div class="text-center py-4">
+          <div class="spinner-border spinner-border-sm text-secondary"></div>
+        </div>
+      } @else if (notifications().length === 0) {
+        <div class="text-center text-secondary py-4">
+          <i class="bi bi-bell-slash fs-4"></i>
+          <p class="small mt-2 mb-0">No notifications</p>
+        </div>
+      } @else {
+        <div class="notification-list">
+          @for (item of notifications(); track item.id) {
+            <button class="notification-item" [class.unread]="!item.read"
+                    (click)="open(item)">
+              <span class="notification-icon">
+                <i class="bi {{ iconFor(item.type) }}"></i>
+              </span>
+              <span class="flex-grow-1 min-w-0 text-start">
+                <span class="d-block small">{{ item.message }}</span>
+                @if (item.taskTitle) {
+                  <span class="d-block text-secondary text-truncate"
+                        style="font-size: 0.7rem;">
+                    {{ item.taskTitle }}
+                  </span>
+                }
+                <span class="d-block text-secondary" style="font-size: 0.7rem;">
+                  {{ item.createdAt | date: 'dd MMM, HH:mm' }}
+                </span>
+              </span>
+              @if (!item.read) {
+                <span class="unread-dot"></span>
+              }
+            </button>
+          }
+        </div>
+      }
+
+    </div>
+  }
+
+</div>

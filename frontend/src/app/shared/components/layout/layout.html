@@ -1,0 +1,105 @@
+<div class="layout">
+
+  <aside class="sidebar" [class.open]="sidebarOpen()">
+
+    <div class="sidebar-brand">
+      <i class="bi bi-check2-square"></i>
+      <span>Task Manager</span>
+    </div>
+
+    <nav class="sidebar-nav">
+
+      @if (authService.isAdmin()) {
+        <div class="sidebar-section">Admin</div>
+
+        <a routerLink="/admin/dashboard" routerLinkActive="active"
+           (click)="closeSidebar()">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a routerLink="/admin/users" routerLinkActive="active"
+           (click)="closeSidebar()">
+          <i class="bi bi-people"></i> Users
+        </a>
+
+        <a routerLink="/admin/tasks" routerLinkActive="active"
+           (click)="closeSidebar()">
+          <i class="bi bi-list-check"></i> Tasks
+        </a>
+
+        <a routerLink="/admin/activity-log" routerLinkActive="active"
+           (click)="closeSidebar()">
+          <i class="bi bi-clock-history"></i> Activity log
+        </a>
+      } @else {
+        <div class="sidebar-section">Workspace</div>
+
+        <a routerLink="/my-tasks" routerLinkActive="active"
+           (click)="closeSidebar()">
+          <i class="bi bi-list-check"></i> My tasks
+        </a>
+      }
+
+      <div class="sidebar-section">Account</div>
+
+      <a routerLink="/profile" routerLinkActive="active"
+         (click)="closeSidebar()">
+        <i class="bi bi-person-circle"></i> Profile
+      </a>
+
+    </nav>
+  </aside>
+
+  @if (sidebarOpen()) {
+    <div class="sidebar-backdrop" (click)="closeSidebar()"></div>
+  }
+
+  <div class="main">
+
+    <header class="topbar">
+
+      <button class="btn btn-sm d-lg-none" (click)="toggleSidebar()"
+              aria-label="Toggle menu">
+        <i class="bi bi-list fs-5"></i>
+      </button>
+
+      <div class="ms-auto d-flex align-items-center gap-3">
+
+        <app-notification-bell />
+
+        <div class="dropdown">
+          <button class="btn btn-sm d-flex align-items-center gap-2"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="avatar">
+              {{ initials(authService.currentUser()?.fullName ?? '') }}
+            </span>
+            <span class="d-none d-sm-inline small">
+              {{ authService.currentUser()?.fullName }}
+            </span>
+            <i class="bi bi-chevron-down small"></i>
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" routerLink="/profile">
+                <i class="bi bi-person me-2"></i> Profile
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <button class="dropdown-item text-danger" (click)="logout()">
+                <i class="bi bi-box-arrow-right me-2"></i> Sign out
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+
+  </div>
+</div>

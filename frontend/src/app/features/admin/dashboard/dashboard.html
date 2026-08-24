@@ -1,0 +1,158 @@
+<div class="mb-4">
+  <h1 class="h4 mb-1">Dashboard</h1>
+  <p class="text-secondary small mb-0">
+    Welcome back, {{ authService.currentUser()?.fullName }}
+  </p>
+</div>
+
+@if (errorMessage()) {
+  <div class="alert alert-danger py-2 small">{{ errorMessage() }}</div>
+}
+
+@if (loading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-secondary"></div>
+  </div>
+} @else if (stats(); as s) {
+
+  <div class="row g-3 mb-4">
+
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="bi bi-people text-secondary"></i>
+            <span class="text-secondary" style="font-size: 0.8rem;">Total users</span>
+          </div>
+          <div class="h3 mb-0">{{ s.totalUsers }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="bi bi-list-check text-secondary"></i>
+            <span class="text-secondary" style="font-size: 0.8rem;">Total tasks</span>
+          </div>
+          <div class="h3 mb-0">{{ s.totalTasks }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="bi bi-hourglass-split text-warning"></i>
+            <span class="text-secondary" style="font-size: 0.8rem;">Pending</span>
+          </div>
+          <div class="h3 mb-0">{{ s.pendingTasks }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="bi bi-check-circle text-success"></i>
+            <span class="text-secondary" style="font-size: 0.8rem;">Completed</span>
+          </div>
+          <div class="h3 mb-0">{{ s.completedTasks }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row g-3">
+
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h2 class="h6 mb-3">Task breakdown</h2>
+
+          <div class="d-flex align-items-baseline gap-2 mb-3">
+            <span class="h2 mb-0">{{ completionRate() }}%</span>
+            <span class="text-secondary small">completed</span>
+          </div>
+
+          <div class="progress mb-3" style="height: 8px;">
+            <div class="progress-bar bg-success"
+                 [style.width.%]="percentage(s.completedTasks)"></div>
+            <div class="progress-bar bg-warning"
+                 [style.width.%]="percentage(s.inProgressTasks)"></div>
+            <div class="progress-bar bg-secondary"
+                 [style.width.%]="percentage(s.pendingTasks)"></div>
+          </div>
+
+          <div class="d-flex flex-column gap-2 small">
+            <div class="d-flex align-items-center">
+              <span class="legend-dot bg-success"></span>
+              <span class="ms-2 text-secondary">Completed</span>
+              <span class="ms-auto">{{ s.completedTasks }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <span class="legend-dot bg-warning"></span>
+              <span class="ms-2 text-secondary">In progress</span>
+              <span class="ms-auto">{{ s.inProgressTasks }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <span class="legend-dot bg-secondary"></span>
+              <span class="ms-2 text-secondary">Pending</span>
+              <span class="ms-auto">{{ s.pendingTasks }}</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+
+          <div class="d-flex align-items-center mb-3">
+            <h2 class="h6 mb-0">Recent tasks</h2>
+            <a routerLink="/admin/tasks"
+               class="ms-auto small text-decoration-none">
+              View all
+            </a>
+          </div>
+
+          @if (recentTasks().length === 0) {
+            <p class="text-secondary small text-center py-4 mb-0">No tasks yet</p>
+          } @else {
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <tbody>
+                  @for (task of recentTasks(); track task.id) {
+                    <tr>
+                      <td class="ps-0">
+                        <a [routerLink]="['/tasks', task.id]"
+                           class="text-decoration-none text-body small">
+                          {{ task.title }}
+                        </a>
+                      </td>
+                      <td class="text-secondary d-none d-md-table-cell"
+                          style="font-size: 0.75rem;">
+                        {{ task.assignedUserName ?? 'Unassigned' }}
+                      </td>
+                      <td class="text-end pe-0">
+                        <app-status-badge [status]="task.status" />
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+}

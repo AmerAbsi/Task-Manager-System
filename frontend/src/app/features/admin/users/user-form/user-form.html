@@ -1,0 +1,97 @@
+<div class="modal-backdrop-custom" (click)="close()"></div>
+
+<div class="modal-custom">
+  <div class="card border-0 shadow">
+
+    <div class="card-header bg-white d-flex align-items-center">
+      <h2 class="h6 mb-0">{{ isEditMode ? 'Edit user' : 'New user' }}</h2>
+      <button class="btn btn-sm ms-auto" (click)="close()" aria-label="Close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="card-body">
+
+      @if (errorMessage()) {
+        <div class="alert alert-danger py-2 small">{{ errorMessage() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <div class="mb-3">
+          <label class="form-label small">Full name</label>
+          <input type="text" class="form-control form-control-sm"
+                 formControlName="fullName"
+                 [class.is-invalid]="form.controls.fullName.touched && form.controls.fullName.invalid">
+          <div class="invalid-feedback">Full name is required</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small">Username</label>
+          <input type="text" class="form-control form-control-sm"
+                 formControlName="username"
+                 [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid">
+          <div class="invalid-feedback">
+            Username must be at least 3 characters
+          </div>
+          @if (isEditMode) {
+            <div class="form-text small">Username cannot be changed</div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small">Email</label>
+          <input type="email" class="form-control form-control-sm"
+                 formControlName="email"
+                 [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid">
+          <div class="invalid-feedback">Enter a valid email address</div>
+        </div>
+
+        @if (!isEditMode) {
+          <div class="mb-3">
+            <label class="form-label small">Password</label>
+            <input type="password" class="form-control form-control-sm"
+                   formControlName="password"
+                   [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid">
+            <div class="invalid-feedback">
+              At least 8 characters, with an uppercase letter, a lowercase letter,
+              a number and a special character
+            </div>
+          </div>
+        }
+
+        <div class="row g-2 mb-4">
+          <div class="col-6">
+            <label class="form-label small">Role</label>
+            <select class="form-select form-select-sm" formControlName="role">
+              @for (role of roles; track role) {
+                <option [value]="role">{{ role }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label small">Status</label>
+            <select class="form-select form-select-sm" formControlName="active">
+              <option [ngValue]="true">Active</option>
+              <option [ngValue]="false">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 justify-content-end">
+          <button type="button" class="btn btn-sm btn-outline-secondary"
+                  (click)="close()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-sm btn-accent" [disabled]="saving()">
+            @if (saving()) {
+              <span class="spinner-border spinner-border-sm me-1"></span>
+            }
+            {{ isEditMode ? 'Save changes' : 'Create user' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

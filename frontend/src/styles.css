@@ -1,0 +1,70 @@
+:root {
+  --bs-primary: #534ab7;
+  --bs-primary-rgb: 83, 74, 183;
+  --tm-accent: #534ab7;
+  --tm-accent-hover: #3c3489;
+  --tm-sidebar: #1f2430;
+  --tm-sidebar-active: #2c3240;
+}
+
+.text-accent {
+  color: var(--tm-accent);
+}
+
+.btn-accent {
+  background-color: var(--tm-accent);
+  border-color: var(--tm-accent);
+  color: #fff;
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+  background-color: var(--tm-accent-hover);
+  border-color: var(--tm-accent-hover);
+  color: #fff;
+}
+
+.form-control:focus {
+  border-color: var(--tm-accent);
+  box-shadow: 0 0 0 0.2rem rgba(83, 74, 183, 0.15);
+}
+
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 1050;
+}
+
+.modal-custom {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 460px;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1055;
+  padding: 0 1rem;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #eeedfe;
+  color: var(--tm-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
