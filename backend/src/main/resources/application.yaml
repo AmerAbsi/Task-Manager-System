@@ -1,0 +1,39 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: task-manager
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/taskmanager_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  jackson:
+    default-property-inclusion: non_null
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:ZmFrZS1kZXYtc2VjcmV0LXJlcGxhY2UtaW4tcHJvZHVjdGlvbi1taW4tMzItYnl0ZXM=}
+    expiration-ms: 86400000
+
+  cors:
+    allowed-origins: http://localhost:4200
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
