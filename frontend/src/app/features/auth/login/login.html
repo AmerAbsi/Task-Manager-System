@@ -59,7 +59,9 @@
 
         <div class="mb-3">
           <label for="username" class="form-label small fw-medium">Username</label>
-          <div class="input-group input-group-lg">
+          <div
+            class="input-group input-group-lg"
+            [class.input-invalid]="form.controls.username.touched && form.controls.username.invalid">
             <span class="input-group-text bg-white">
               <i class="bi bi-person text-secondary"></i>
             </span>
@@ -79,7 +81,9 @@
 
         <div class="mb-4">
           <label for="password" class="form-label small fw-medium">Password</label>
-          <div class="input-group input-group-lg">
+          <div
+            class="input-group input-group-lg"
+            [class.input-invalid]="form.controls.password.touched && form.controls.password.invalid">
             <span class="input-group-text bg-white">
               <i class="bi bi-lock text-secondary"></i>
             </span>

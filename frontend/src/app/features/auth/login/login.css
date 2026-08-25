@@ -131,3 +131,19 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   }
 }
+
+/* ---------- Validation ---------- */
+
+.input-group.input-invalid .input-group-text,
+.input-group.input-invalid .form-control {
+  border-color: #dc3545;
+}
+
+.input-group.input-invalid:focus-within .input-group-text,
+.input-group.input-invalid:focus-within .form-control {
+  border-color: #dc3545;
+}
+
+.input-group.input-invalid .form-control:focus {
+  box-shadow: none;
+}
