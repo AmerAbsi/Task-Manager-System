@@ -1,0 +1,133 @@
+.login-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- Left branding panel ---------- */
+
+.login-brand {
+  flex: 0 0 52%;
+  background-color: var(--tm-sidebar);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(83, 74, 183, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(83, 74, 183, 0.18), transparent 40%);
+  align-items: center;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-brand-content {
+  max-width: 440px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-icon {
+  font-size: 1.6rem;
+  color: #8b82ee;
+}
+
+.brand-name {
+  color: #e8e9ed;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.brand-heading {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.brand-sub {
+  color: #9ba1b0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+.brand-points {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.brand-points li {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: #c3c7d1;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.brand-points i {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background-color: rgba(139, 130, 238, 0.15);
+  color: #8b82ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+/* ---------- Right form panel ---------- */
+
+.login-form-panel {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background-color: #ffffff;
+}
+
+.login-form-inner {
+  width: 100%;
+  max-width: 380px;
+}
+
+/* ---------- Input group polish ---------- */
+
+.input-group-text {
+  border-color: #dee2e6;
+}
+
+.input-group:focus-within .input-group-text {
+  border-color: var(--tm-accent);
+}
+
+.input-group:focus-within .form-control {
+  border-color: var(--tm-accent);
+  box-shadow: none;
+}
+
+.input-group .form-control:focus {
+  box-shadow: none;
+}
+
+.input-group button.input-group-text {
+  cursor: pointer;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 991.98px) {
+  .login-form-panel {
+    background-color: #f5f5f7;
+  }
+
+  .login-form-inner {
+    background-color: #ffffff;
+    padding: 2rem 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+}

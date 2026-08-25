@@ -1,55 +1,123 @@
-<div class="login-page d-flex align-items-center justify-content-center">
-  <div class="card shadow-sm login-card">
-    <div class="card-body p-4">
+<div class="login-wrapper">
 
-      <div class="text-center mb-4">
-        <i class="bi bi-check2-square fs-1 text-accent"></i>
-        <h1 class="h4 mt-2 mb-1">Task Manager</h1>
-        <p class="text-secondary small mb-0">Sign in to continue</p>
+  <!-- Left: branding panel -->
+  <div class="login-brand d-none d-lg-flex">
+    <div class="login-brand-content">
+
+      <div class="d-flex align-items-center gap-2 mb-5">
+        <i class="bi bi-check2-square brand-icon"></i>
+        <span class="brand-name">Task Manager</span>
       </div>
 
+      <h2 class="brand-heading">
+        Everything your team is working on, in one place.
+      </h2>
+
+      <p class="brand-sub">
+        Assign work, track progress, and keep the conversation
+        attached to the task it belongs to.
+      </p>
+
+      <ul class="brand-points">
+        <li>
+          <i class="bi bi-people"></i>
+          <span>Role-based access for admins and team members</span>
+        </li>
+        <li>
+          <i class="bi bi-chat-left-text"></i>
+          <span>Threaded comments on every task</span>
+        </li>
+        <li>
+          <i class="bi bi-bell"></i>
+          <span>Real-time notifications as work changes</span>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- Right: form panel -->
+  <div class="login-form-panel">
+    <div class="login-form-inner">
+
+      <div class="d-lg-none text-center mb-4">
+        <i class="bi bi-check2-square fs-1 text-accent"></i>
+      </div>
+
+      <h1 class="h3 mb-1">Welcome back</h1>
+      <p class="text-secondary mb-4">Sign in to your account to continue</p>
+
       @if (errorMessage()) {
-        <div class="alert alert-danger py-2 small" role="alert">
-          {{ errorMessage() }}
+        <div class="alert alert-danger d-flex align-items-center gap-2 py-2 small"
+             role="alert">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          <span>{{ errorMessage() }}</span>
         </div>
       }
 
       <form [formGroup]="form" (ngSubmit)="submit()">
 
         <div class="mb-3">
-          <label for="username" class="form-label small">Username</label>
-          <input
-            id="username"
-            type="text"
-            class="form-control"
-            formControlName="username"
-            [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
-            autocomplete="username">
-          <div class="invalid-feedback">Username is required</div>
+          <label for="username" class="form-label small fw-medium">Username</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-text bg-white">
+              <i class="bi bi-person text-secondary"></i>
+            </span>
+            <input
+              id="username"
+              type="text"
+              class="form-control border-start-0 ps-0"
+              placeholder="Enter your username"
+              formControlName="username"
+              [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
+              autocomplete="username">
+          </div>
+          @if (form.controls.username.touched && form.controls.username.invalid) {
+            <div class="text-danger small mt-1">Username is required</div>
+          }
         </div>
 
         <div class="mb-4">
-          <label for="password" class="form-label small">Password</label>
-          <input
-            id="password"
-            type="password"
-            class="form-control"
-            formControlName="password"
-            [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid"
-            autocomplete="current-password">
-          <div class="invalid-feedback">Password is required</div>
+          <label for="password" class="form-label small fw-medium">Password</label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-text bg-white">
+              <i class="bi bi-lock text-secondary"></i>
+            </span>
+            <input
+              id="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              class="form-control border-start-0 border-end-0 ps-0"
+              placeholder="Enter your password"
+              formControlName="password"
+              [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid"
+              autocomplete="current-password">
+            <button type="button" class="input-group-text bg-white border-start-0"
+                    (click)="togglePassword()"
+                    [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+              <i class="bi text-secondary"
+                 [class.bi-eye]="!showPassword()"
+                 [class.bi-eye-slash]="showPassword()"></i>
+            </button>
+          </div>
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <div class="text-danger small mt-1">Password is required</div>
+          }
         </div>
 
-        <button type="submit" class="btn btn-accent w-100" [disabled]="loading()">
+        <button type="submit" class="btn btn-accent btn-lg w-100"
+                [disabled]="loading()">
           @if (loading()) {
             <span class="spinner-border spinner-border-sm me-2"></span>
             Signing in
           } @else {
             Sign in
+            <i class="bi bi-arrow-right ms-1"></i>
           }
         </button>
 
       </form>
+
     </div>
   </div>
+
 </div>

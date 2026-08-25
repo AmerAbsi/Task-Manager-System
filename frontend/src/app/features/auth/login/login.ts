@@ -14,6 +14,7 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  showPassword = signal(false);
 
   loading = signal(false);
   errorMessage = signal('');
@@ -48,5 +49,9 @@ export class Login {
         this.errorMessage.set(err.error?.message ?? 'Login failed. Please try again.');
       }
     });
+  }
+
+  togglePassword() {
+    this.showPassword.update(value => !value);
   }
 }
